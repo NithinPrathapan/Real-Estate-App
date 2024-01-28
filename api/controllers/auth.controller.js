@@ -51,3 +51,32 @@ export const signin = async (req, res, next) => {
     next(error);
   }
 };
+
+export const googleAuth = async (req, res, next) => {
+  try {
+    const userExist = await User.findOne({ email: req.body.email });
+    if (userExist) {
+      const token = jwt.sign({ id: userExist._id }, process.env.SECRET);
+      const { password: pass, ...rest } = userExist._doc;
+      res
+        .cookie("accesss_token", token, { httpOnly: true })
+        .status(200)
+        .json(rest);
+    } else {
+      const generatePassword = Math.random().toString(36).slice(-8);
+      const hashedPassword = bcryptjs.hashSync(generatePassword, 10);
+      const newUser = new User({
+        username: req.body.name,
+        email: req.body.email,
+        password: hashedPassword,
+        avatar: req.body.photo,
+      });
+      await newUser.save();
+      const token = jwt
+        .sign({ id: newUser._id, token }, { httpOnly: true })
+        .json(rest);
+    }
+  } catch (error) {
+    next(error);
+  }
+};

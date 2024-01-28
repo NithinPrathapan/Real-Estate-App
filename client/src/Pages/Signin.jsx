@@ -7,6 +7,7 @@ import {
   signInStart,
   signInSuccess,
 } from "../redux/user/UserSlice";
+import OAuth from "../Components/OAuth";
 
 const Signin = () => {
   const dispatch = useDispatch();
@@ -45,8 +46,8 @@ const Signin = () => {
     }
   };
   return (
-    <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-3xl justify-center items-center flex font-semibold my-7">
+    <div className="p-3 max-w-lg  mx-auto">
+      <h1 className="text-3xl uppercase justify-center items-center flex font-semibold my-7">
         Sign-in
       </h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -68,13 +69,14 @@ const Signin = () => {
           disabled={loading}
           className="bg-slate-700 text-white uppercase hover:opacity-95 p-3 rounded-lg disabled:opacity-80"
         >
-          {loading ? "Loading.." : "Sign up"}
+          {loading ? "Loading.." : "Sign In"}
         </button>
+        <OAuth />
       </form>
       <div className="flex gap-2 my-5">
         <p>Don't have an account?</p>
         <Link to="/signup">
-          <span className="text-blue-700">Sign in</span>
+          <span className="text-blue-700">Sign up</span>
         </Link>
       </div>
       {error && <p className="text-red-500 mt-5">{error}</p>}

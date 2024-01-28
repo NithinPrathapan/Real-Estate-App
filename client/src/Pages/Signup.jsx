@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import OAuth from "../Components/OAuth";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ const Signup = () => {
   };
   return (
     <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-3xl justify-center items-center flex font-semibold my-7">
+      <h1 className="text-3xl uppercase justify-center items-center flex font-semibold my-7">
         Sign-up
       </h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -71,6 +72,7 @@ const Signup = () => {
         >
           {loading ? "Loading.." : "Sign up"}
         </button>
+        <OAuth />
       </form>
       <div className="flex gap-2 my-5">
         <p>have an account?</p>
