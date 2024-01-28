@@ -1,12 +1,18 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInFailure,
+  signInStart,
+  signInSuccess,
+} from "../redux/user/UserSlice";
 
 const Signin = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({});
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const { loading, error } = useSelector((state) => state.user);
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -16,28 +22,26 @@ const Signin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
-      const response = await axios.post(
-        "http://localhost:8000/api/auth/signin",
-        {
-          email: formData.email,
-          password: formData.password,
-        },
-        { withCredentials: true }
-      );
-      console.log(response);
-      if (response.data.status !== 201) {
-        setLoading(false);
-        setError(response.message);
-        console.log(response);
-      }
-      setLoading(false);
-      setError(null);
-      // navigate("/");
+      dispatch(signInStart());
+      const res = await axios.post("http://localhost:8000/api/auth/signin", {
+        email: formData.email,
+        password: formData.password,
+      });
+      const data = res.data;
+      console.log("Login success", data);
+      dispatch(signInSuccess(data.data));
+      navigate("/");
     } catch (error) {
-      setLoading(false);
-      setError(error.message);
-      console.log(error.message);
+      if (error.response) {
+        console.error("Error response from server:", error.response.data);
+        dispatch(signInFailure(error.response.data.message));
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+        dispatch(signInFailure(error.request.data.message));
+      } else {
+        console.error("Error setting up the request:", error.message);
+        dispatch(signInFailure(error.message));
+      }
     }
   };
   return (
