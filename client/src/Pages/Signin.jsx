@@ -13,7 +13,8 @@ const Signin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({});
-  const { loading, error } = useSelector((state) => state.user);
+  const { loading, error } = useSelector((state) => state.user.user);
+  console.log(loading, error);
   const handleChange = (e) => {
     setFormData({
       ...formData,
