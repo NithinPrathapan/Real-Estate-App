@@ -12,14 +12,15 @@ const app = express();
 
 const corsOptions = {
   origin: "http://localhost:3000",
-  credentials: true, //access-control-allow-credentials:true
-  optionSuccessStatus: 200,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true, // If your frontend uses cookies or authentication
+  optionsSuccessStatus: 200,
 };
+
 app.use(cors(corsOptions));
 
 app.use(express.json());
-
-app.use(cookieParser());
+app.use(cookieParser(process.env.SECRET, { secure: true }));
 
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
@@ -41,6 +42,8 @@ mongoose
   })
   .catch((err) => console.log(err));
 
-app.listen(8000, () => {
-  console.log("server listening on port 3000");
+const port = 8000;
+
+app.listen(port, () => {
+  console.log("server listening on port", port);
 });

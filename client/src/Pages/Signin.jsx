@@ -25,10 +25,19 @@ const Signin = () => {
     e.preventDefault();
     try {
       dispatch(signInStart());
-      const res = await axios.post("http://localhost:8000/api/auth/signin", {
-        email: formData.email,
-        password: formData.password,
-      });
+      const res = await axios.post(
+        "http://localhost:8000/api/auth/signin",
+        {
+          email: formData.email,
+          password: formData.password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
       const data = res.data;
       console.log("Login success", data);
       dispatch(signInSuccess(data.data));

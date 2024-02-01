@@ -10,7 +10,7 @@ export const test = (req, res) => {
 
 export const updateUser = async (req, res, next) => {
   if (req.user.id !== req.params.id)
-    return next(errorHandler(401, "You can update your own account"));
+    return next(errorHandler(401, "You can only update your own account"));
   try {
     if (req.body.password) {
       req.body.password = bcryptjs.hashSync(req.body.password, 10);
@@ -27,9 +27,14 @@ export const updateUser = async (req, res, next) => {
       },
       { new: true }
     );
+    if (!updateUser)
+      return next(
+        errorHandler(404, "User not updated, Please sign-in again and try")
+      );
     const { password, ...rest } = updateUser._doc;
     res.status(200).json(rest);
   } catch (error) {
+    console.log("++++++", error.message);
     next(error);
   }
 };
