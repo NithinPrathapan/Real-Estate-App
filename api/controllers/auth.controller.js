@@ -83,8 +83,17 @@ export const googleAuth = async (req, res, next) => {
         .cookie("access_token", token, { httpOnly: true })
         .status(200)
         .json(newUser);
-        console.log('new user saved ggogle');
+      console.log("new user saved ggogle");
     }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const signout = async (req, res, next) => {
+  try {
+    res.clearCookie("access_token");
+    res.status(200).json("User has been logged out");
   } catch (error) {
     next(error);
   }

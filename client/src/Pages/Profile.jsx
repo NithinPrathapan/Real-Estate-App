@@ -13,6 +13,9 @@ import {
   deleteUserFailure,
   deleteUserStart,
   deleteUserSuccess,
+  signOutUserFailure,
+  signOutUserStart,
+  signOutUserSuccess,
   updateUserFailure,
   updateUserStart,
   updateUserSuccess,
@@ -119,6 +122,21 @@ const Profile = () => {
     }
   };
 
+  const handleSignout = async (e) => {
+    e.preventDefault();
+    dispatch(signOutUserStart());
+    try {
+      const res = await axios.get(`http://localhost:8000/api/auth/signout`, {
+        withCredentials: true,
+      });
+      console.log("signout successful", res.data);
+      dispatch(signOutUserSuccess());
+    } catch (error) {
+      console.log(error);
+      dispatch(signOutUserFailure(error.res));
+    }
+  };
+
   useEffect(() => {
     if (file) {
       handleFileUpload(file);
@@ -194,7 +212,9 @@ const Profile = () => {
         >
           Delete Account
         </span>
-        <span className="text-blue-700">Sign Out </span>
+        <span onClick={handleSignout} className="text-blue-700 cursor-pointer">
+          Sign Out{" "}
+        </span>
       </div>
       <p className="text-red-700">{error ? error : ""}</p>
       <p className="text-green-500 font-semibold ">
