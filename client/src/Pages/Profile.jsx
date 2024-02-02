@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import {
   getDownloadURL,
@@ -204,6 +205,12 @@ const Profile = () => {
         >
           {loading ? "Loading..." : "update"}
         </button>
+        <Link
+          className="uppercase p-3 bg-green-700 rounded-lg text-white text-center hover:opacity-95"
+          to="/create-listing"
+        >
+          create listing
+        </Link>
       </form>
       <div className="flex justify-between my-5">
         <span
