@@ -2,6 +2,7 @@ import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
 
 export const verifyToken = (req, res, next) => {
+  console.log("verify token middleware ++++++++++++++++++++++++++");
   const token = req.cookies.access_token;
   if (!token) {
     return next(errorHandler(401, "Unauthorized"));

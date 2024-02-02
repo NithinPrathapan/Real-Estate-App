@@ -38,3 +38,27 @@ export const updateUser = async (req, res, next) => {
     next(error);
   }
 };
+
+export const delteUser = async (req, res, next) => {
+  if (req.params.id !== req.user.id)
+    return next(errorHandler(404, "You can only delete your account"));
+  try {
+    const userId = req.params.id;
+
+    const userToDelete = await User.findById(userId);
+    if (!userToDelete) {
+      return next(errorHandler(404, "User not found"));
+    }
+
+    await User.findByIdAndDelete(userId);
+
+    res
+      .clearCookie("access_token")
+      .status(201)
+      .json({ message: "User deleted successfully" });
+
+    console.log("user deleted successfully");
+  } catch (error) {
+    next(error);
+  }
+};

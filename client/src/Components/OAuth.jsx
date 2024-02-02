@@ -15,15 +15,21 @@ const OAuth = () => {
       const auth = getAuth(app);
       const result = await signInWithPopup(auth, provider);
       console.log(result);
-      const res = await axios.post("http://localhost:8000/api/auth/google", {
-        email: result.user.email,
-        photo: result.user.photoURL,
-        name: result.user.displayName,
-      });
+      const res = await axios.post(
+        "http://localhost:8000/api/auth/google",
+        {
+          email: result.user.email,
+          photo: result.user.photoURL,
+          name: result.user.displayName,
+        },
+        {
+          withCredentials: true,
+        }
+      );
       const data = res.data;
       console.log(data);
       dispatch(signInSuccess(data));
-      navigate("/");
+      navigate("/profile");
     } catch (error) {
       console.log(" Google authentication failed");
       dispatch(

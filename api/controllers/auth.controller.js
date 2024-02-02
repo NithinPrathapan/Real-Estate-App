@@ -57,13 +57,16 @@ export const googleAuth = async (req, res, next) => {
   try {
     const userExist = await User.findOne({ email: req.body.email });
     if (userExist) {
+      console.log("user exists");
       const token = jwt.sign({ id: userExist._id }, process.env.SECRET);
       const { password: pass, ...rest } = userExist._doc;
       res
-        .cookie("accesss_token", token, { httpOnly: true })
+        .cookie("access_token", token, { httpOnly: true })
         .status(200)
         .json(rest);
+      return;
     } else {
+      console.log("new user creation");
       const generatePassword = Math.random().toString(36).slice(-8);
       const hashedPassword = bcryptjs.hashSync(generatePassword, 10);
       const newUser = new User({
@@ -74,8 +77,13 @@ export const googleAuth = async (req, res, next) => {
       });
       await newUser.save();
       const token = jwt
-        .sign({ id: newUser._id, token }, { httpOnly: true })
+        .sign({ id: newUser._id }, process.env.SECRET)
         .json(rest);
+      res
+        .cookie("access_token", token, { httpOnly: true })
+        .status(200)
+        .json(newUser);
+        console.log('new user saved ggogle');
     }
   } catch (error) {
     next(error);

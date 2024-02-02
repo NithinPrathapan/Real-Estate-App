@@ -10,6 +10,9 @@ import {
 } from "firebase/storage";
 import { app } from "../firebase";
 import {
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
   updateUserFailure,
   updateUserStart,
   updateUserSuccess,
@@ -64,6 +67,7 @@ const Profile = () => {
 
   const handleChange = (e) => {
     e.preventDefault();
+    setUpdateSuccess(false);
     setFormData({
       ...formData,
       [e.target.id]: e.target.value,
@@ -94,7 +98,24 @@ const Profile = () => {
       const errorMsg = error.response.data.message;
       console.log(errorMsg);
       dispatch(updateUserFailure(errorMsg));
-      
+    }
+  };
+
+  // ! DELETE ACCOUNT FUNCTION
+
+  const handleDeleteUser = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch(deleteUserStart());
+      const res = await axios.delete(
+        `http://localhost:8000/api/user/delete/${currentUser._id}`,
+        { withCredentials: true }
+      );
+      dispatch(deleteUserSuccess(res.data));
+      console.log("User deleted successfully", res.data);
+    } catch (error) {
+      console.log("error deleting user", error.response);
+      dispatch(deleteUserFailure(error));
     }
   };
 
@@ -167,11 +188,18 @@ const Profile = () => {
         </button>
       </form>
       <div className="flex justify-between my-5">
-        <span className="text-red-700">Delete Account</span>
+        <span
+          onClick={handleDeleteUser}
+          className="text-red-700 cursor-pointer"
+        >
+          Delete Account
+        </span>
         <span className="text-blue-700">Sign Out </span>
       </div>
       <p className="text-red-700">{error ? error : ""}</p>
-      <p className="text-green-500 font-semibold ">{updateSuccess ? 'User Updated Successfully' : ""}</p>
+      <p className="text-green-500 font-semibold ">
+        {updateSuccess ? "User Updated Successfully" : ""}
+      </p>
     </div>
   );
 };
