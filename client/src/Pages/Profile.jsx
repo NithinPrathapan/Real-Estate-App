@@ -39,7 +39,10 @@ const Profile = () => {
   const [fileError, setFileError] = useState(false);
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [showListError, setShowListError] = useState(false);
+  const [userListings, setUserlistings] = useState([]);
 
+  // !profile image upload function
   const handleFileUpload = (file) => {
     const storage = getStorage(app);
     const fileName = new Date().getTime() + file.name;
@@ -78,6 +81,7 @@ const Profile = () => {
     });
   };
 
+  // ! submit updateddata function
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -123,6 +127,7 @@ const Profile = () => {
     }
   };
 
+  // ! signout function
   const handleSignout = async (e) => {
     e.preventDefault();
     dispatch(signOutUserStart());
@@ -135,6 +140,41 @@ const Profile = () => {
     } catch (error) {
       console.log(error);
       dispatch(signOutUserFailure(error.res));
+    }
+  };
+
+  // !show listings function
+  const handleShowListings = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/user/listings/${currentUser._id}`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      setUserlistings(response.data);
+    } catch (error) {
+      setShowListError(true);
+      console.error(error);
+    }
+  };
+
+  // ! delete listing function
+
+  const handleDeleteListing = async (id) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:8000/api/listing/delete/${id}`,
+        {
+          withCredentials: true,
+        }
+      );
+      const data = response.data;
+      setUserlistings((prev) => prev.filter((listing) => listing._id !== id));
+    } catch (error) {
+      console.log(error.message);
     }
   };
 
@@ -224,9 +264,59 @@ const Profile = () => {
         </span>
       </div>
       <p className="text-red-700">{error ? error : ""}</p>
-      <p className="text-green-500 font-semibold ">
-        {updateSuccess ? "User Updated Successfully" : ""}
+      <p className="text-green-500 text-sm font-semibold mb-7 ">
+        {updateSuccess ? "User Updated Successfully " : ""}
       </p>
+      <button
+        onClick={handleShowListings}
+        className="text-green-700 font-semibold text-center w-full"
+      >
+        Show listings
+      </button>
+      <p className="text-red-700 text-sm">
+        {showListError ? showListError : " "}
+      </p>
+      <div className="flex flex-col gap-4">
+        <h1 className="text-2xl uppercase font-bold text-center mt-7 w-full">
+          Your listings
+        </h1>
+        {userListings &&
+          userListings.length > 0 &&
+          userListings.map((listing) => (
+            <div
+              key={listing._id}
+              className="border rounded-lg p-3 flex items-center gap-4 justify-between"
+            >
+              <Link
+                className="text-slate-700 font-semibold hover:underline truncate flex-1"
+                to={`/listing/${listing._id}`}
+              >
+                <img
+                  className="h-16 w-16 object-contain "
+                  src={listing.imageUrls[0]}
+                  alt="list-image"
+                />
+              </Link>
+              <Link
+                className="text-slate-700 font-semibold hover:underline truncate flex-1"
+                to={`/listing/${listing._id}`}
+              >
+                <p className="">{listing.name}</p>
+              </Link>
+              <div className="flex flex-col items-center gap-2">
+                <button
+                  onClick={() => handleDeleteListing(listing._id)}
+                  className="text-red-700 uppercase font-semibold hover:opacity-80 "
+                >
+                  Delete
+                </button>
+                <button className="text-green-700 uppercase font-semibold hover:opacity-80 ">
+                  Edit
+                </button>
+              </div>
+            </div>
+          ))}
+      </div>
     </div>
   );
 };
