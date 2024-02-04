@@ -142,7 +142,7 @@ const CreateListing = () => {
       const data = res.data;
       console.log("axios response: ", data);
       setLoading(false);
-      navigate(`/lisitng/${data._id}`);
+      navigate(`/lisitngs/${data._id}`);
     } catch (error) {
       setError(error.message);
       console.log(error.message);

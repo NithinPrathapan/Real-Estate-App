@@ -1,6 +1,8 @@
 import { errorHandler } from "../utils/error.js";
 import bcryptjs from "bcryptjs";
 import User from "../models/user.model.js";
+import Listing from "../models/lisitng.model.js";
+import mongoose from "mongoose";
 
 export const test = (req, res) => {
   res.json({
@@ -60,5 +62,19 @@ export const delteUser = async (req, res, next) => {
     console.log("user deleted successfully");
   } catch (error) {
     next(error);
+  }
+};
+
+export const getUserListings = async (req, res, next) => {
+  if (req.params.id === req.user.id) {
+    try {
+      const listings = await Listing.find({ userRef: req.user.id });
+      console.log(listings);
+      res.status(200).json(listings);
+    } catch (error) {
+      console.log(error.message);
+    }
+  } else {
+    res.status(500).json({ message: "You can only access your listings" });
   }
 };
