@@ -1,4 +1,5 @@
-import { Listing } from "../models/lisitng.model.js";
+import mongoose from "mongoose";
+import Listing from "../models/lisitng.model.js";
 import { errorHandler } from "../utils/error.js";
 
 export const createListing = async (req, res, next) => {
@@ -26,6 +27,39 @@ export const deleteListing = async (req, res, next) => {
     res.status(200).json("deleted successfully");
   } catch (error) {
     console.log(error);
+    next(error);
+  }
+};
+
+export const editListing = async (req, res, next) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      console.log("Invalid ObjectId:", req.params.id);
+      return next(errorHandler(400, "Invalid ObjectId"));
+    }
+
+    const listing = await Listing.findById(req.params.id);
+
+    if (!listing) {
+      console.log("Listing not found for ID:", req.params.id);
+      return next(errorHandler(404, "Listing not found"));
+    }
+
+    if (req.user.id !== listing.userRef) {
+      console.log("User is not authorized to edit this listing");
+      return next(errorHandler(404, "You can only edit your own listings"));
+    }
+
+    const updatedListing = await Listing.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+
+    console.log("Listing updated successfully:", updatedListing);
+    res.status(200).json(updatedListing);
+  } catch (error) {
+    console.error("Error in editListing:", error);
     next(error);
   }
 };
