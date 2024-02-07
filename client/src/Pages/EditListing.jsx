@@ -4,13 +4,13 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { app } from "../firebase";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-const CreateListing = () => {
+const EditListing = () => {
   const [files, setFiles] = useState([]);
   const [imageUploadError, setimageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -30,6 +30,28 @@ const CreateListing = () => {
     parking: false,
     furnished: false,
   });
+  const params = useParams();
+  console.log(formData);
+
+  // !get the list based on the id
+  useEffect(() => {
+    const fetchListing = async () => {
+      try {
+        const listingId = params.id;
+        const response = await axios.get(
+          `http://localhost:8000/api/listing/get/${listingId}`,
+          {
+            withCredentials: true,
+          }
+        );
+        setFormData(response.data);
+      } catch (error) {
+        setError("Fetching data failed!!! Try again");
+        console.error(error.message);
+      }
+    };
+    fetchListing();
+  }, []);
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user.user);
   //   ! handle image submit
@@ -123,14 +145,14 @@ const CreateListing = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (formData.imageUrls.length < 1)
-        return setError("You must upload at least one image");
+      // if (formData.imageUrls.length < 1)
+      //   return setError("You must upload at least one image");
       if (+formData.regularPrice <= +formData.discountedPrice)
         return setError("Dicount price should be less than regular price");
       setLoading(true);
       setError(false);
       const res = await axios.post(
-        "http://localhost:8000/api/listing/create",
+        `http://localhost:8000/api/listing/edit/${params.id}`,
         { ...formData, userRef: currentUser._id },
         {
           headers: {
@@ -151,8 +173,8 @@ const CreateListing = () => {
   };
   return (
     <main className="p-3 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-semibold my-7 text-center">
-        {loading ? "Creating..." : "Create listing"}
+      <h1 className="text-2xl font-bold my-7  uppercase text-center">
+        Update a lisiting
       </h1>
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
         <div className="flex flex-col gap-4 flex-1">
@@ -334,8 +356,8 @@ const CreateListing = () => {
               type="button"
               onClick={handleImageSubmit}
               className="p-3 text-green-700 border
-             border-green-700 rounded uppercase hover:shadow-lg
-            disabled:opacity-80 "
+               border-green-700 rounded uppercase hover:shadow-lg
+              disabled:opacity-80 "
             >
               {uploading ? "uploading..." : "upload"}
             </button>
@@ -365,20 +387,20 @@ const CreateListing = () => {
                 </button>
               </div>
             ))}
-        <p className="text-red-700 text-sm ">{error}</p>
-        <button
-          disabled={loading || uploading}
-          type="submit"
-          className="p-3 bg-slate-700  text-white 
-            rounded-lg uppercase hover:opacity-95
-            disabled:opacity-80"
-        >
-          {loading ? "Creating..." : "create list"}
-        </button>
+          <p className="text-red-700 text-sm ">{error}</p>
+          <button
+            disabled={loading || uploading}
+            type="submit"
+            className="p-3 bg-slate-700  text-white 
+              rounded-lg uppercase hover:opacity-95
+              disabled:opacity-80"
+          >
+            {loading ? "Updating..." : "Update list"}
+          </button>
         </div>
       </form>
     </main>
   );
 };
 
-export default CreateListing;
+export default EditListing;

@@ -178,6 +178,8 @@ const Profile = () => {
     }
   };
 
+
+
   useEffect(() => {
     if (file) {
       handleFileUpload(file);
@@ -310,9 +312,14 @@ const Profile = () => {
                 >
                   Delete
                 </button>
-                <button className="text-green-700 uppercase font-semibold hover:opacity-80 ">
-                  Edit
-                </button>
+                <Link to={`/edit-listing/${listing._id}`}>
+                  <button
+                  
+                    className="text-green-700 uppercase font-semibold hover:opacity-80 "
+                  >
+                    Edit
+                  </button>
+                </Link>
               </div>
             </div>
           ))}
