@@ -164,7 +164,7 @@ const EditListing = () => {
       const data = res.data;
       console.log("axios response: ", data);
       setLoading(false);
-      navigate(`/lisitngs/${data._id}`);
+      navigate(`/listing/${data._id}`);
     } catch (error) {
       setError(error.message);
       console.log(error.message);
