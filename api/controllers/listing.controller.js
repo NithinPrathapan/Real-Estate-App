@@ -94,7 +94,7 @@ export const getListings = async (req, res, next) => {
     }
     let type = req.query.type;
     if (type === undefined || type === "all") {
-      type = { $in: ["slae", "rent"] };
+      type = { $in: ["sale", "rent"] };
     }
     let searchTerm = req.query.searchTerm || "";
     let sort = req.query.sort || "createdAt";
@@ -106,6 +106,7 @@ export const getListings = async (req, res, next) => {
       furnished,
       parking,
       type,
+     
     })
       .sort({
         [sort]: order,
