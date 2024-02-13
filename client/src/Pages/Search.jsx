@@ -7,7 +7,7 @@ const Search = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [listing, setListing] = useState([]);
-  console.log(listing);
+  const [showMore, setShowMore] = useState(false);
   const [sidebarData, setSidebarData] = useState({
     searchTerm: "",
     type: "all",
@@ -87,16 +87,36 @@ const Search = () => {
     }
     const fetchListings = async () => {
       setLoading(true);
+      setShowMore(false);
       const searchQuery = urlParams.toString();
       const response = await axios.get(
         `http://localhost:8000/api/listing/get?${searchQuery}`
       );
-      console.log(response);
+      if (response.data.length > 8) {
+        setShowMore(true);
+      } else {
+        setShowMore(false);
+      }
       setListing(response.data);
       setLoading(false);
     };
     fetchListings();
   }, [location.search]);
+
+  const onShowMoreClick = async () => {
+    const numberOfListings = listing.length;
+    const startIndex = numberOfListings;
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set("startIndex", startIndex);
+    const searchQuery = urlParams.toString();
+
+    const response = await axios.get(`/api/listing/get?${searchQuery}`);
+    const data = await response.data;
+    if (data.length < 9) {
+      setShowMore(false);
+    }
+    setListing([...listing, ...data]);
+  };
   return (
     <div className="flex flex-col md:flex-row">
       <div className="p-7 border-b-2 sm:border-r-2  md:min-h-screen ">
@@ -195,8 +215,8 @@ const Search = () => {
               id="sort_order"
               className="border rounded-lg p-3"
             >
-              <option value="regularprice_desc">Price high to low</option>
-              <option value="regularprice_asc">Price low to high</option>
+              <option value="regularprice_asc">Price high to low</option>
+              <option value="regularprice_desc">Price low to high</option>
               <option value="createdAt_desc">Latest</option>
               <option value="createdAt_asc">Oldest</option>
             </select>
@@ -225,6 +245,16 @@ const Search = () => {
               <ListingItem key={item._id} listing={item} />
             ))}
         </div>
+        {showMore && (
+          <button
+            className="font-semibold w-full text-green-600 hover:underline p-7 text-lg text-center"
+            onClick={() => {
+              onShowMoreClick();
+            }}
+          >
+            Show More
+          </button>
+        )}
       </div>
     </div>
   );
