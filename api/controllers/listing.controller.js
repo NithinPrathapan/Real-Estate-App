@@ -82,7 +82,7 @@ export const getListings = async (req, res, next) => {
     let startIndex = parseInt(req.query.startIndex) || 0;
     let offer = req.query.offer;
     if (offer === undefined || offer === "false") {
-      offer = { $in: [false, true] };
+       offer = { $in: [false, true] };
     }
     let furnished = req.query.furnished;
     if (furnished === undefined || furnished === "false") {
@@ -106,7 +106,6 @@ export const getListings = async (req, res, next) => {
       furnished,
       parking,
       type,
-     
     })
       .sort({
         [sort]: order,
