@@ -12,7 +12,6 @@ const Home = () => {
   const [saleListing, setSaleListing] = useState([]);
   const [rentListing, setRentListing] = useState([]);
   SwiperCore.use(Navigation);
-  console.log(offerListing);
   useEffect(() => {
     const fetchOfferlising = async () => {
       try {
@@ -45,7 +44,7 @@ const Home = () => {
       }
     };
     fetchOfferlising();
-  }, [window.location]);
+  }, []);
   return (
     <div>
       <div className="flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto">
