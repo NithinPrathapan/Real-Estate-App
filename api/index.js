@@ -5,7 +5,7 @@ import userRouter from "./routes/user.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import listingRouter from "./routes/listing.routes.js";
 import cookieParser from "cookie-parser";
-import cors from "cors";
+// import cors from "cors";
 import path from "path";
 
 dotenv.config();
@@ -14,14 +14,14 @@ const app = express();
 
 const __dirname = path.resolve();
 
-const corsOptions = {
-  origin: "http://localhost:3000",
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true, // If your frontend uses cookies or authentication
-  optionsSuccessStatus: 200,
-};
+// const corsOptions = {
+//   origin: "http://localhost:3000",
+//   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+//   credentials: true, // If your frontend uses cookies or authentication
+//   optionsSuccessStatus: 200,
+// };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(cookieParser(process.env.SECRET, { secure: true }));
