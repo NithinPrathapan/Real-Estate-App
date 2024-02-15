@@ -14,14 +14,13 @@ const app = express();
 
 const __dirname = path.resolve();
 
-const corsOptions = {
-  origin: "http://localhost:3000",
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true, // If your frontend uses cookies or authentication
-  optionsSuccessStatus: 200,
-};
-
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: "https://mern-estate-c7gd.onrender.com", 
+    methods: ["GET", "POST", "PUT", "DELETE"], 
+    credentials: true, 
+  })
+);
 
 app.use(express.json());
 app.use(cookieParser(process.env.SECRET, { secure: true }));
