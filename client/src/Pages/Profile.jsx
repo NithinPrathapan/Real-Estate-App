@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   getDownloadURL,
@@ -28,7 +28,7 @@ const Profile = () => {
   // allow write : if
   // request.resource.size < 2 * 1024 * 1024 &&
   // request.resource.contentType.matches('image/.*')
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const fileRef = useRef(null);
   const { currentUser, error, loading } = useSelector(
@@ -124,6 +124,7 @@ const Profile = () => {
       );
       dispatch(deleteUserSuccess(res.data));
       console.log("User deleted successfully", res.data);
+      Navigate("/");
     } catch (error) {
       console.log("error deleting user", error.response);
       dispatch(deleteUserFailure(error));

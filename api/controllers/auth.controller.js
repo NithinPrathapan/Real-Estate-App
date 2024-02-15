@@ -26,6 +26,7 @@ export const signup = async (req, res, next) => {
 };
 
 export const signin = async (req, res, next) => {
+  console.log("signin functioncalled");
   const { email, password } = req.body;
   try {
     const validUser = await User.findOne({ email });
@@ -40,13 +41,11 @@ export const signin = async (req, res, next) => {
     const token = jwt.sign({ id: validUser._id }, process.env.SECRET);
 
     const { password: pass, ...rest } = validUser._doc;
-    res
-      .cookie("access_token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-      })
-      .status(200)
-      .json({ message: "Login successful", data: rest });
+    res.cookie("access_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
+    res.status(200).json({ message: "Login successful", data: rest });
   } catch (error) {
     console.log(error);
     next(error);
