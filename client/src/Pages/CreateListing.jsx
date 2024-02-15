@@ -142,7 +142,7 @@ const CreateListing = () => {
       const data = res.data;
       console.log("axios response: ", data);
       setLoading(false);
-      navigate(`/lisitngs/${data._id}`);
+      navigate(`/listing/${data._id}`);
     } catch (error) {
       setError(error.message);
       console.log(error.message);
@@ -365,16 +365,16 @@ const CreateListing = () => {
                 </button>
               </div>
             ))}
-        <p className="text-red-700 text-sm ">{error}</p>
-        <button
-          disabled={loading || uploading}
-          type="submit"
-          className="p-3 bg-slate-700  text-white 
+          <p className="text-red-700 text-sm ">{error}</p>
+          <button
+            disabled={loading || uploading}
+            type="submit"
+            className="p-3 bg-slate-700  text-white 
             rounded-lg uppercase hover:opacity-95
             disabled:opacity-80"
-        >
-          {loading ? "Creating..." : "create list"}
-        </button>
+          >
+            {loading ? "Creating..." : "create list"}
+          </button>
         </div>
       </form>
     </main>

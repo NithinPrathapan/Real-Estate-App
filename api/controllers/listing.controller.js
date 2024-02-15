@@ -65,6 +65,7 @@ export const editListing = async (req, res, next) => {
 };
 
 export const getListing = async (req, res, next) => {
+  console.log(req.params.id);
   try {
     const listing = await Listing.findById(req.params.id);
     if (!listing) {
@@ -82,7 +83,7 @@ export const getListings = async (req, res, next) => {
     let startIndex = parseInt(req.query.startIndex) || 0;
     let offer = req.query.offer;
     if (offer === undefined || offer === "false") {
-       offer = { $in: [false, true] };
+      offer = { $in: [false, true] };
     }
     let furnished = req.query.furnished;
     if (furnished === undefined || furnished === "false") {

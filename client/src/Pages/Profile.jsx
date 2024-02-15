@@ -41,7 +41,10 @@ const Profile = () => {
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [showListError, setShowListError] = useState(false);
   const [userListings, setUserlistings] = useState([]);
+  const [profileError, setProfileError] = useState(false);
 
+  const [showList, setShowList] = useState(false);
+  console.log(profileError);
   // !profile image upload function
   const handleFileUpload = (file) => {
     const storage = getStorage(app);
@@ -145,6 +148,7 @@ const Profile = () => {
 
   // !show listings function
   const handleShowListings = async (e) => {
+    setShowList(!showList);
     e.preventDefault();
     try {
       const response = await axios.get(
@@ -155,9 +159,10 @@ const Profile = () => {
       );
 
       setUserlistings(response.data);
+      setProfileError(false);
     } catch (error) {
       setShowListError(true);
-      console.error(error);
+      setProfileError(error.response.data.message);
     }
   };
 
@@ -177,8 +182,6 @@ const Profile = () => {
       console.log(error.message);
     }
   };
-
-
 
   useEffect(() => {
     if (file) {
@@ -278,51 +281,67 @@ const Profile = () => {
       <p className="text-red-700 text-sm">
         {showListError ? showListError : " "}
       </p>
-      <div className="flex flex-col gap-4">
-        <h1 className="text-2xl uppercase font-bold text-center mt-7 w-full">
+      {userListings && userListings.length > 0 && showList && (
+        <h1 className="text-2xl uppercase font-bold text-center my-7 w-full">
           Your listings
         </h1>
+      )}
+      <div className="flex flex-col mb-7  gap-4">
         {userListings &&
+          showList &&
           userListings.length > 0 &&
           userListings.map((listing) => (
-            <div
-              key={listing._id}
-              className="border rounded-lg p-3 flex items-center gap-4 justify-between"
-            >
-              <Link
-                className="text-slate-700 font-semibold hover:underline truncate flex-1"
-                to={`/listing/${listing._id}`}
-              >
-                <img
-                  className="h-16 w-16 object-contain "
-                  src={listing.imageUrls[0]}
-                  alt="list-image"
-                />
-              </Link>
-              <Link
-                className="text-slate-700 font-semibold hover:underline truncate flex-1"
-                to={`/listing/${listing._id}`}
-              >
-                <p className="">{listing.name}</p>
-              </Link>
-              <div className="flex flex-col items-center gap-2">
-                <button
-                  onClick={() => handleDeleteListing(listing._id)}
-                  className="text-red-700 uppercase font-semibold hover:opacity-80 "
+            <div key={listing._id}>
+              <div className="border rounded-lg p-3 flex items-center gap-4 justify-between">
+                <Link
+                  className="text-slate-700 font-semibold hover:underline truncate flex-1"
+                  to={`/listing/${listing._id}`}
                 >
-                  Delete
-                </button>
-                <Link to={`/edit-listing/${listing._id}`}>
-                  <button
-                  
-                    className="text-green-700 uppercase font-semibold hover:opacity-80 "
-                  >
-                    Edit
-                  </button>
+                  <img
+                    className="h-16 w-16 object-contain "
+                    src={listing.imageUrls[0]}
+                    alt="list-image"
+                  />
                 </Link>
+                <Link
+                  className="text-slate-700 font-semibold hover:underline truncate flex-1"
+                  to={`/listing/${listing._id}`}
+                >
+                  <p className="">{listing.name}</p>
+                </Link>
+                <div className="flex flex-col items-center gap-2">
+                  <button
+                    onClick={() => handleDeleteListing(listing._id)}
+                    className="text-red-700 uppercase font-semibold hover:opacity-80 "
+                  >
+                    Delete
+                  </button>
+                  <Link to={`/edit-listing/${listing._id}`}>
+                    <button className="text-green-700 uppercase font-semibold hover:opacity-80 ">
+                      Edit
+                    </button>
+                  </Link>
+                </div>
               </div>
             </div>
           ))}
+        {userListings == 0 && showList && !profileError && (
+          <div>
+            <h1 className="text-center my-2 text-xl font-semibold text-red-700">
+              Oops!!! Your list is empty
+            </h1>
+          </div>
+        )}
+        {profileError && (
+          <div className="text-center my-2">
+            <Link
+              to={"/signin"}
+              className=" text-md font-semibold  hover:underline text-red-700"
+            >
+              {profileError}
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );

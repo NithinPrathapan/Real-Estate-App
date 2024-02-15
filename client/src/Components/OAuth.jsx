@@ -27,7 +27,6 @@ const OAuth = () => {
         }
       );
       const data = res.data;
-      console.log(data);
       dispatch(signInSuccess(data));
       navigate("/profile");
     } catch (error) {

@@ -227,12 +227,14 @@ const Search = () => {
         </form>
       </div>
       <div className="">
-        <h1 className="text-3xl font-semibold border-b p-3 mt-5 text-slate-700">
+        <h1 className="text-3xl text-center font-semibold border-b p-3 mt-5 text-slate-700">
           Listing Results
         </h1>
         <div className="p-7 flex flex-wrap gap-4">
           {!loading && listing.length === 0 && (
-            <p className="text-xl text-slate-700">No listing found!!</p>
+            <p className="text-xl text-center w-full  text-slate-700">
+              No listings found!!
+            </p>
           )}
           {loading && (
             <p className="text-xl text-slate-700 text-center w-full">

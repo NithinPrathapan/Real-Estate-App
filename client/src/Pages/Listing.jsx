@@ -25,13 +25,13 @@ const Listing = () => {
   const [error, seterror] = useState(false);
   const [contact, setContact] = useState(false);
   const params = useParams();
-  const dp = listing.discountedPrice;
 
   useEffect(() => {
     const fetchListing = async () => {
       setLoading(true);
       try {
         const listingId = params.id;
+        console.log(listingId);
         const response = await axios.get(
           `http://localhost:8000/api/listing/get/${listingId}`,
           {
@@ -79,7 +79,7 @@ const Listing = () => {
               {listing.offer ? listing.discountedPrice : listing.regularPrice}
               {listing.type === "rent" && " / month"}
             </p>
-            <p className="flex items-center mt-6 gap-2 text-slate-600  text-sm">
+            <p className="flex items-center gap-2 text-slate-600  text-sm">
               <FaMapMarkerAlt className="text-green-700" />
               {listing.address}
             </p>
@@ -89,7 +89,11 @@ const Listing = () => {
               </p>
               {listing.offer && (
                 <p className="bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md">
-                  ${(+listing.regularPrice - +dp).toLocaleString()} OFF
+                  $
+                  {(
+                    +listing.regularPrice - +listing.discountedPrice
+                  ).toLocaleString()}{" "}
+                  OFF
                 </p>
               )}
             </div>
