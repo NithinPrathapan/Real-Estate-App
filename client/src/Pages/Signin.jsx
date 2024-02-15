@@ -24,7 +24,6 @@ const Signin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      dispatch(signInStart());
       const response = await axios.post(
         "http://localhost:8000/api/auth/signin",
         {
