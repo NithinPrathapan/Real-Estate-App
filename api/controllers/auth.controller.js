@@ -42,8 +42,6 @@ export const signin = async (req, res, next) => {
     res.cookie("access_token", token, {
       httpOnly: true,
       secure: true,
-      sameSite: "Strict",
-      maxAge: 3600000,
     });
 
     const { password: pass, ...rest } = validUser._doc;
