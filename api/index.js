@@ -14,7 +14,6 @@ const app = express();
 
 const __dirname = path.resolve();
 
-
 app.use(
   cors({
     origin: "https://mern-estate-c7gd.onrender.com",

@@ -24,7 +24,8 @@ const Signin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
+      dispatch(signInStart());
+      const response = await axios.post(
         "http://localhost:8000/api/auth/signin",
         {
           email: formData.email,
@@ -37,8 +38,10 @@ const Signin = () => {
           withCredentials: true,
         }
       );
-      const data = res.data;
-      console.log("Login success", data);
+      const data = response.data;
+      cookies.set("access_token", data.token);
+      console.log('hai');
+      console.log(data.token);
       dispatch(signInSuccess(data.data));
       navigate("/");
     } catch (error) {
