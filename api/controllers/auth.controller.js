@@ -39,13 +39,11 @@ export const signin = async (req, res, next) => {
       return next(errorHandler(401, "Invalid email or password "));
 
     const token = await jwt.sign({ id: validUser._id }, process.env.SECRET);
-    res.cookie("access_token", token, {
-      httpOnly: true,
-      secure: true,
-    });
-
     const { password: pass, ...rest } = validUser._doc;
-    res.status(200).json({ message: "Login successful", data: rest, token });
+    res
+      .cookie("access_token", token, { httpOnly: true })
+      .status(200)
+      .json(rest);
   } catch (error) {
     console.log(error);
     next(error);
