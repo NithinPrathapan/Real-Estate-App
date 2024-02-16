@@ -77,7 +77,7 @@ export const getListing = async (req, res, next) => {
   }
 };
 export const getListings = async (req, res, next) => {
-  console.log("function called");
+  console.log("get listing function called");
   try {
     let limit = parseInt(req.query.limit) || 9;
     let startIndex = parseInt(req.query.startIndex) || 0;

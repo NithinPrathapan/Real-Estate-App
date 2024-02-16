@@ -24,7 +24,7 @@ const Signin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
+      const res = await axios.post(
         "http://localhost:8000/api/auth/signin",
         {
           email: formData.email,
@@ -37,8 +37,9 @@ const Signin = () => {
           withCredentials: true,
         }
       );
-      console.log("Login success", response.data);
-      dispatch(signInSuccess(response.data));
+      const data = res.data;
+      console.log("Login success", data);
+      dispatch(signInSuccess(data.data));
       navigate("/");
     } catch (error) {
       if (error.response) {
@@ -46,7 +47,7 @@ const Signin = () => {
         dispatch(signInFailure(error.response.data.message));
       } else if (error.request) {
         console.error("No response received:", error.request);
-        dispatch(signInFailure(error.request.data));
+        dispatch(signInFailure(error.request.data.message));
       } else {
         console.error("Error setting up the request:", error.message);
         dispatch(signInFailure(error.message));
