@@ -14,14 +14,12 @@ const app = express();
 
 const __dirname = path.resolve();
 
-const corsOptions = {
-  origin: "*",
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true, // If your frontend uses cookies or authentication
-  optionsSuccessStatus: 200,
-};
-
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: "https://mern-estate-c7gd.onrender.com",
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use(cookieParser(process.env.SECRET, { secure: true }));
@@ -33,16 +31,6 @@ app.use("/api/listing", listingRouter);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
-});
-
-app.use((err, req, res, next) => {
-  const statusCode = err.statusCode || 500;
-  const message = err.message || "internal server error";
-  return res.status(statusCode).json({
-    success: false,
-    statusCode,
-    message,
-  });
 });
 
 mongoose

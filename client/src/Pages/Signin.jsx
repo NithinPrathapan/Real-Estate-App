@@ -42,16 +42,8 @@ const Signin = () => {
       dispatch(signInSuccess(data.data));
       navigate("/");
     } catch (error) {
-      if (error.response) {
-        console.error("Error response from server:", error.response.data);
-        dispatch(signInFailure(error.response.data.message));
-      } else if (error.request) {
-        console.error("No response received:", error.request);
-        dispatch(signInFailure(error.request.data.message));
-      } else {
-        console.error("Error setting up the request:", error.message);
-        dispatch(signInFailure(error.message));
-      }
+      console.log(error);
+      dispatch(signInFailure(error));
     }
   };
   return (
