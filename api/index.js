@@ -16,7 +16,7 @@ const __dirname = path.resolve();
 
 app.use(
   cors({
-    origin: "https://mern-estate-c7gd.onrender.com",
+    origin: ["https://mern-estate-c7gd.onrender.com", "http://localhost:3000"],
     credentials: true,
   })
 );
