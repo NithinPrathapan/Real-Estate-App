@@ -39,8 +39,6 @@ const Signin = () => {
         }
       );
       const data = response.data;
-      cookies.set("access_token", data.token);
-      console.log('hai');
       console.log(data.token);
       dispatch(signInSuccess(data.data));
       navigate("/");
