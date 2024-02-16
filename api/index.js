@@ -15,7 +15,7 @@ const app = express();
 const __dirname = path.resolve();
 
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: "*",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true, // If your frontend uses cookies or authentication
   optionsSuccessStatus: 200,
