@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home";
 import Signin from "./Pages/Signin";
@@ -11,8 +11,15 @@ import CreateListing from "./Pages/CreateListing";
 import EditListing from "./Pages/EditListing";
 import Listing from "./Pages/Listing";
 import Search from "./Pages/Search";
+import { useDispatch } from "react-redux";
+import { reloadpage } from "./redux/user/UserSlice";
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(reloadpage());
+  }, []);
   return (
     <BrowserRouter>
       <Header />

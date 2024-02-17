@@ -62,9 +62,13 @@ export const googleAuth = async (req, res, next) => {
       const token = jwt.sign({ id: userExist._id }, process.env.SECRET);
       const { password: pass, ...rest } = userExist._doc;
       res
-        .cookie("access_token", token, { httpOnly: true })
-        .status(200)
-        .json(rest);
+        .cookie("access_token", token, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "none",
+        })
+        .status(200);
+      res.status(200).json({ message: "Login successful", data: rest, token });
       return;
     } else {
       console.log("new user creation");
@@ -80,11 +84,14 @@ export const googleAuth = async (req, res, next) => {
       const token = jwt
         .sign({ id: newUser._id }, process.env.SECRET)
         .json(rest);
-      res
-        .cookie("access_token", token, { httpOnly: true })
-        .status(200)
-        .json(newUser);
-      console.log("new user saved ggogle");
+      res.cookie("access_token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+      });
+
+      res.status(200).json({ message: "Login successful", data: rest, token });
+      console.log("new user saved google");
     }
   } catch (error) {
     next(error);
@@ -93,7 +100,11 @@ export const googleAuth = async (req, res, next) => {
 
 export const signout = async (req, res, next) => {
   try {
-    res.clearCookie("access_token");
+    res.clearCookie("access_token", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
     res.status(200).json("User has been logged out");
     console.log("signout successful");
   } catch (error) {

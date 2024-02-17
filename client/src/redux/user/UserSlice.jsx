@@ -9,6 +9,9 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    reloadpage: (state) => {
+      state.error = null;
+    },
     signInStart: (state) => {
       state.loading = true;
     },
@@ -65,6 +68,7 @@ const userSlice = createSlice({
 });
 
 export const {
+  reloadpage,
   signInStart,
   signInFailure,
   signInSuccess,
