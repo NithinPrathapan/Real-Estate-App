@@ -40,14 +40,11 @@ export const signin = async (req, res, next) => {
 
     const token = await jwt.sign({ id: validUser._id }, process.env.SECRET);
     const { password: pass, ...rest } = validUser._doc;
-    const secureCookie = process.env.NODE_ENV === 'production';
 
     res.cookie("access_token", token, {
       httpOnly: true,
-      secure: secureCookie,
-      domain: "mern-estate-c7gd.onrender.com",
+      secure: "none",
     });
-    
 
     res.status(200).json({ message: "Login successful", data: rest, token });
   } catch (error) {
