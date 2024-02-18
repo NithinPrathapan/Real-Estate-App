@@ -42,9 +42,8 @@ const Profile = () => {
   const [showListError, setShowListError] = useState(false);
   const [userListings, setUserlistings] = useState([]);
   const [profileError, setProfileError] = useState(false);
-
-  const [showList, setShowList] = useState(false);
   console.log(profileError);
+  const [showList, setShowList] = useState(false);
   // !profile image upload function
   const handleFileUpload = (file) => {
     const storage = getStorage(app);
@@ -124,7 +123,7 @@ const Profile = () => {
       );
       dispatch(deleteUserSuccess(res.data));
       console.log("User deleted successfully", res.data);
-      Navigate("/");
+      navigate("/");
     } catch (error) {
       console.log("error deleting user", error.response);
       dispatch(deleteUserFailure(error));
@@ -149,8 +148,9 @@ const Profile = () => {
 
   // !show listings function
   const handleShowListings = async (e) => {
-    setShowList(!showList);
     e.preventDefault();
+    console.log("show listings function");
+    setShowList(!showList);
     try {
       const response = await axios.get(
         `http://localhost:8000/api/user/listings/${currentUser._id}`,
@@ -158,12 +158,14 @@ const Profile = () => {
           withCredentials: true,
         }
       );
-
-      setUserlistings(response.data);
-      setProfileError(false);
+      if (response) {
+        setUserlistings(response.data);
+      } else {
+        setProfileError("Something went wrong");
+      }
     } catch (error) {
-      setShowListError(true);
-      setProfileError(error.response.data.message);
+      console.log("cookie eror", error);
+      setProfileError(error.response.statusText + "!! please signin again");
     }
   };
 

@@ -11,6 +11,7 @@ const userSlice = createSlice({
   reducers: {
     reloadpage: (state) => {
       state.error = null;
+      state.loading = false;
     },
     signInStart: (state) => {
       state.loading = true;

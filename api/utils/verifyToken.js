@@ -2,9 +2,10 @@ import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
 
 export const verifyToken = (req, res, next) => {
+  console.log("token verification middleware");
   const token = req.cookies.access_token;
-  console.log(token);
   if (!token) {
+    console.log("no token provided");
     return next(
       errorHandler(401, "Unauthorized access!!! Please signin again.")
     );

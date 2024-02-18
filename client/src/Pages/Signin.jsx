@@ -44,7 +44,7 @@ const Signin = () => {
       navigate("/");
     } catch (error) {
       console.log(error);
-      dispatch(signInFailure(error));
+      dispatch(signInFailure("invalid credentials.. Please try again"));
     }
   };
   return (
