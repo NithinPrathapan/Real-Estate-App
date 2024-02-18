@@ -46,8 +46,8 @@ const Home = () => {
     fetchOfferlising();
   }, []);
   return (
-    <div>
-      <div className="flex flex-col gap-6 p-28 px-3 bg-slate-200 max-w-full mx-auto shadow-md">
+    <div className="p-1">
+      <div className="flex flex-col gap-6 p-10 px-3 bg-slate-200 max-w-full mx-auto shadow-md">
         <h1 className="text-slate-700 font-bold text-3xl lg:text-6xl">
           Find your next <span className="text-slate-500">perfect</span>
           <br />
@@ -68,18 +68,19 @@ const Home = () => {
         {offerListing &&
           offerListing.length > 1 &&
           offerListing.map((listing) => (
-            <SwiperSlide key={listing._id}>
+            <SwiperSlide  key={listing._id}>
               <div
                 style={{
                   background: `url(${listing.imageUrls[0]}) center no-repeat`,
                   backgroundSize: "cover",
+                  borderRadius:'5px',
                 }}
                 className="h-[500px]"
               ></div>
             </SwiperSlide>
           ))}
       </Swiper>
-      <div className="max-w-6xl mx-auto p-3 flex flex-col gap-8 my-10">
+      <div className="">
         {offerListing && offerListing.length > 0 && (
           <div className="mx-auto">
             <div className=" my-3 flex flex-col">
