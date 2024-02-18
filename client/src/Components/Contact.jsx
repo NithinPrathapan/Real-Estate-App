@@ -12,7 +12,7 @@ const Contact = ({ listing }) => {
     const fetchLandlord = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/user/${listing.userRef}`,
+          `/api/user/${listing.userRef}`,
           {
             withCredentials: true,
           }

@@ -89,7 +89,7 @@ const Profile = () => {
     try {
       dispatch(updateUserStart());
       const res = await axios.post(
-        `http://localhost:8000/api/user/update/${currentUser._id}`,
+        `/api/user/update/${currentUser._id}`,
         formData,
         {
           headers: {
@@ -118,7 +118,7 @@ const Profile = () => {
     try {
       dispatch(deleteUserStart());
       const res = await axios.delete(
-        `http://localhost:8000/api/user/delete/${currentUser._id}`,
+        `/api/user/delete/${currentUser._id}`,
         { withCredentials: true }
       );
       dispatch(deleteUserSuccess(res.data));
@@ -135,7 +135,7 @@ const Profile = () => {
     e.preventDefault();
     dispatch(signOutUserStart());
     try {
-      const res = await axios.get(`http://localhost:8000/api/auth/signout`, {
+      const res = await axios.get(`/api/auth/signout`, {
         withCredentials: true,
       });
       console.log("signout successful", res.data);
@@ -153,7 +153,7 @@ const Profile = () => {
     setShowList(!showList);
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/user/listings/${currentUser._id}`,
+        `/api/user/listings/${currentUser._id}`,
         {
           withCredentials: true,
         }
@@ -174,7 +174,7 @@ const Profile = () => {
   const handleDeleteListing = async (id) => {
     try {
       const response = await axios.delete(
-        `http://localhost:8000/api/listing/delete/${id}`,
+        `/api/listing/delete/${id}`,
         {
           withCredentials: true,
         }

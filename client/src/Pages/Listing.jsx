@@ -33,7 +33,7 @@ const Listing = () => {
         const listingId = params.id;
         console.log(listingId);
         const response = await axios.get(
-          `http://localhost:8000/api/listing/get/${listingId}`,
+          `/api/listing/get/${listingId}`,
           {
             withCredentials: true,
           }

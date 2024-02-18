@@ -39,7 +39,7 @@ const EditListing = () => {
       try {
         const listingId = params.id;
         const response = await axios.get(
-          `http://localhost:8000/api/listing/get/${listingId}`,
+          `/api/listing/get/${listingId}`,
           {
             withCredentials: true,
           }
@@ -152,7 +152,7 @@ const EditListing = () => {
       setLoading(true);
       setError(false);
       const res = await axios.post(
-        `http://localhost:8000/api/listing/edit/${params.id}`,
+        `/api/listing/edit/${params.id}`,
         { ...formData, userRef: currentUser._id },
         {
           headers: {

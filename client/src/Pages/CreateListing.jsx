@@ -130,7 +130,7 @@ const CreateListing = () => {
       setLoading(true);
       setError(false);
       const res = await axios.post(
-        "http://localhost:8000/api/listing/create",
+        "/api/listing/create",
         { ...formData, userRef: currentUser._id },
         {
           headers: {

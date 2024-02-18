@@ -90,7 +90,7 @@ const Search = () => {
       setShowMore(false);
       const searchQuery = urlParams.toString();
       const response = await axios.get(
-        `http://localhost:8000/api/listing/get?${searchQuery}`
+        `/api/listing/get?${searchQuery}`
       );
       if (response.data.length > 8) {
         setShowMore(true);
