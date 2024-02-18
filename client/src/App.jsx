@@ -13,6 +13,7 @@ import Listing from "./Pages/Listing";
 import Search from "./Pages/Search";
 import { useDispatch } from "react-redux";
 import { reloadpage } from "./redux/user/UserSlice";
+import Footer2 from "./Components/Footer/Footer2";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,7 @@ const App = () => {
         </Route>
         <Route path="/search" element={<Search />} />
       </Routes>
+      <Footer2 />
     </BrowserRouter>
   );
 };

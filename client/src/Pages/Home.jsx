@@ -68,12 +68,12 @@ const Home = () => {
         {offerListing &&
           offerListing.length > 1 &&
           offerListing.map((listing) => (
-            <SwiperSlide  key={listing._id}>
+            <SwiperSlide key={listing._id}>
               <div
                 style={{
                   background: `url(${listing.imageUrls[0]}) center no-repeat`,
                   backgroundSize: "cover",
-                  borderRadius:'5px',
+                  borderRadius: "5px",
                 }}
                 className="h-[500px]"
               ></div>
