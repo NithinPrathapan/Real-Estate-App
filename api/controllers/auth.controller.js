@@ -58,20 +58,17 @@ export const googleAuth = async (req, res, next) => {
   try {
     const userExist = await User.findOne({ email: req.body.email });
     if (userExist) {
-      console.log("user exists");
+      console.log("User exists");
       const token = jwt.sign({ id: userExist._id }, process.env.SECRET);
       const { password: pass, ...rest } = userExist._doc;
-      res
-        .cookie("access_token", token, {
-          httpOnly: true,
-          secure: true,
-          sameSite: "none",
-        })
-        .status(200);
+      res.cookie("access_token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+      });
       res.status(200).json({ message: "Login successful", data: rest, token });
-      return;
     } else {
-      console.log("new user creation");
+      console.log("New user creation");
       const generatePassword = Math.random().toString(36).slice(-8);
       const hashedPassword = bcryptjs.hashSync(generatePassword, 10);
       const newUser = new User({
@@ -81,22 +78,20 @@ export const googleAuth = async (req, res, next) => {
         avatar: req.body.photo,
       });
       await newUser.save();
-      const token = jwt
-        .sign({ id: newUser._id }, process.env.SECRET)
-        .json(rest);
+      const token = jwt.sign({ id: newUser._id }, process.env.SECRET);
       res.cookie("access_token", token, {
         httpOnly: true,
         secure: true,
         sameSite: "none",
       });
-
-      res.status(200).json({ message: "Login successful", data: rest, token });
-      console.log("new user saved google");
+      console.log("New user saved (Google)", newUser);
+      res.status(200).json({ message: "Success", user: newUser });
     }
   } catch (error) {
     next(error);
   }
 };
+
 
 export const signout = async (req, res, next) => {
   try {
